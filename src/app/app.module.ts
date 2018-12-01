@@ -22,6 +22,8 @@ import { AddRecipeComponent } from './add-recipe/add-recipe.component';
 import {RouterModule} from '@angular/router';
 import { ViewRecipesComponent } from './view-recipes/view-recipes.component';
 import {FormsModule} from '@angular/forms';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 @NgModule({
   declarations: [
@@ -35,6 +37,8 @@ import {FormsModule} from '@angular/forms';
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     BrowserAnimationsModule,
     LayoutModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
