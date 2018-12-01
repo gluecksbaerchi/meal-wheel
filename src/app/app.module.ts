@@ -23,6 +23,7 @@ import {RouterModule} from '@angular/router';
 import { ViewRecipesComponent } from './view-recipes/view-recipes.component';
 import {FormsModule} from '@angular/forms';
 import { AngularFireModule } from 'angularfire2';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 @NgModule({
@@ -38,6 +39,7 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
     BrowserAnimationsModule,
     LayoutModule,
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule.enablePersistence(),
     AngularFireDatabaseModule,
     MatToolbarModule,
     MatButtonModule,

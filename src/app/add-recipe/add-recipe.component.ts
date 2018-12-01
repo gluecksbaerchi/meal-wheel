@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFirestore } from 'angularfire2/firestore';
 
 @Component({
   selector: 'app-add-recipe',
@@ -10,14 +10,14 @@ export class AddRecipeComponent implements OnInit {
 
   recipe: any = {};
 
-  constructor(private db: AngularFireDatabase) { }
+  constructor(private db: AngularFirestore) { }
 
   ngOnInit() {
 
   }
 
   onSubmit() {
-    this.db.list('recipes').push(this.recipe)
+    this.db.collection('recipes').add(this.recipe)
       .then(_ => {
         this.recipe = {};
         console.log('success');
