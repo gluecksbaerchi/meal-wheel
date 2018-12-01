@@ -1,0 +1,16 @@
+<form #form="ngForm" (ngSubmit)="onSubmit()">
+  <mat-card class="recipe-card">
+    <mat-card-title>
+      Neues Rezept
+    </mat-card-title>
+    <mat-card-content>
+      <mat-form-field>
+        <input matInput placeholder="Titel" maxlength="300" [(ngModel)]="recipe.title" name="recipe"/>
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button type="submit">Save me!</button>
+    </mat-card-actions>
+  </mat-card>
+</form>
+<pre> {{ recipe | json }} </pre>
