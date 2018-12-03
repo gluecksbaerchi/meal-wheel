@@ -1,8 +1,10 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
-import {ViewRecipesDataSource, ViewRecipesItem} from './view-recipes-datasource';
+import {ViewRecipesDataSource} from './view-recipes-datasource';
 import {Subscription} from 'rxjs';
 import { AngularFirestore } from 'angularfire2/firestore';
+import {map} from 'rxjs/operators';
+import {Recipe} from '../models/recipe';
 
 @Component({
   selector: 'app-view-recipes',
@@ -22,10 +24,14 @@ export class ViewRecipesComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.dataSource = new ViewRecipesDataSource(this.paginator, this.sort);
-    this.subscription = this.db.collection<ViewRecipesItem>('recipes').valueChanges().subscribe(d => {
+    this.subscription = this.db.collection<Recipe>('recipes').snapshotChanges().pipe(map(actions => {
       this.dataSource = new ViewRecipesDataSource(this.paginator, this.sort);
-      this.dataSource.data = d;
-    });
+      this.dataSource.data = actions.map(a => {
+        const recipe: Recipe = a.payload.doc.data();
+        recipe.id = a.payload.doc.id;
+        return recipe;
+      });
+    })).subscribe();
   }
 
   ngOnDestroy(): void {

@@ -16,7 +16,7 @@ import {
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,
-  MatCardModule, MatFormFieldModule, MatInputModule
+  MatCardModule, MatFormFieldModule, MatInputModule, MatSnackBarModule
 } from '@angular/material';
 import { AddRecipeComponent } from './add-recipe/add-recipe.component';
 import {RouterModule} from '@angular/router';
@@ -25,13 +25,16 @@ import {FormsModule} from '@angular/forms';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireStorageModule } from 'angularfire2/storage';
+import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavComponent,
     AddRecipeComponent,
-    ViewRecipesComponent
+    ViewRecipesComponent,
+    RecipeDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +44,7 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule.enablePersistence(),
     AngularFireDatabaseModule,
+    AngularFireStorageModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -49,12 +53,14 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSnackBarModule,
     FormsModule,
     RouterModule.forRoot([
         {
             path: '', component: NavComponent, children: [
                 { path: 'add-recipe', component: AddRecipeComponent },
-                { path: 'view-recipes', component: ViewRecipesComponent }
+                { path: 'view-recipes', component: ViewRecipesComponent },
+                { path: 'recipe/:id', component: RecipeDetailComponent },
             ]
         },
     ]),

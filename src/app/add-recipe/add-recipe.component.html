@@ -1,11 +1,21 @@
 <form #form="ngForm" (ngSubmit)="onSubmit()">
-  <mat-card class="recipe-card">
+  <mat-card class="recipe-card" *ngIf="saving">
+    Dein Rezept wird gespeichert...
+  </mat-card>
+  <mat-card class="recipe-card" *ngIf="!saving">
     <mat-card-title>
       Neues Rezept
     </mat-card-title>
     <mat-card-content>
       <mat-form-field>
-        <input matInput placeholder="Titel" maxlength="300" [(ngModel)]="recipe.title" name="recipe"/>
+        <input matInput placeholder="Titel" maxlength="300" [(ngModel)]="recipe.title" name="recipeTitle"/>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" placeholder="Foto" [(ngModel)]="selectedImage" name="recipeImage" disabled/>
+        <button mat-button matSuffix mat-icon-button aria-label="Foto auswählen" (click)="imgFileInput.click()">
+          <mat-icon>add_photo_alternate</mat-icon>
+        </button>
+        <input hidden type="file" #imgFileInput (change)="selectFile($event.target.files)"/>
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions>
@@ -13,3 +23,5 @@
     </mat-card-actions>
   </mat-card>
 </form>
+
+{{ uploadProgress | async }}
