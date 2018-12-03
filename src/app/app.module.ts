@@ -16,7 +16,7 @@ import {
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,
-  MatCardModule, MatFormFieldModule, MatInputModule, MatSnackBarModule
+  MatCardModule, MatFormFieldModule, MatInputModule, MatSnackBarModule, MatGridListModule
 } from '@angular/material';
 import { AddRecipeComponent } from './add-recipe/add-recipe.component';
 import {RouterModule} from '@angular/router';
@@ -49,6 +49,7 @@ import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
+    MatGridListModule,
     MatListModule,
     MatCardModule,
     MatFormFieldModule,
