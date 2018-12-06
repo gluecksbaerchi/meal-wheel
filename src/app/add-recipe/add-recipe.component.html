@@ -1,26 +1,30 @@
 <form #form="ngForm" (ngSubmit)="onSubmit()">
   <mat-card class="recipe-card" align="center" *ngIf="saving">
     Dein Rezept wird gespeichert... <br/>
-    {{ uploadProgress | async }} %
   </mat-card>
-  <mat-card class="recipe-card" *ngIf="!saving">
+  <mat-card class="recipe-card" align="center" *ngIf="!saving">
     <mat-card-title>
       Neues Rezept
     </mat-card-title>
     <mat-card-content>
-      <mat-form-field>
-        <input matInput placeholder="Titel" maxlength="300" [(ngModel)]="recipe.title" name="recipeTitle"/>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput type="text" placeholder="Foto" [(ngModel)]="selectedImage" name="recipeImage" disabled/>
-        <button mat-button matSuffix mat-icon-button aria-label="Foto auswählen" (click)="imgFileInput.click()">
-          <mat-icon>add_photo_alternate</mat-icon>
-        </button>
-        <input hidden type="file" #imgFileInput (change)="selectFile($event.target.files)"/>
-      </mat-form-field>
+      <mat-grid-list cols="4" rowHeight="100px">
+        <mat-grid-tile [colspan]="3">
+          <mat-form-field>
+            <input matInput placeholder="Titel" maxlength="265" [(ngModel)]="recipe.title" name="recipeTitle"/>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <button type="button" mat-button matSuffix mat-icon-button title="Foto hinzufügen" (click)="imgFileInput.click()">
+            <mat-icon>add_photo_alternate</mat-icon>
+          </button>
+          <input hidden type="file" #imgFileInput (change)="uploadFile($event.target.files)"/>
+        </mat-grid-tile>
+      </mat-grid-list>
+      <div *ngIf="uploading">Bildupload...  {{ uploadProgress | async }} %</div>
+      <img *ngIf="selectedImageUrl" class="recipe-image" mat-card-image [src]="selectedImageUrl">
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button type="submit" class="mat-primary">Speichern</button>
+      <button mat-button type="submit" [disabled]="uploading || saving" class="mat-primary">Speichern</button>
     </mat-card-actions>
   </mat-card>
 </form>

@@ -14,10 +14,11 @@ import {MatSnackBar} from '@angular/material';
 export class AddRecipeComponent implements OnInit {
 
   recipe: Recipe = {} as Recipe;
-  selectedFiles: FileList;
-  selectedImage: string;
+  selectedImagePath: string;
+  selectedImageUrl: string;
 
   saving = false;
+  uploading = false;
   uploadProgress: Observable<number>;
 
   constructor(
@@ -31,12 +32,24 @@ export class AddRecipeComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.selectedFiles) {
-      this.saving = true;
-      const file = this.selectedFiles.item(0);
-      this.selectedFiles = undefined;
-      this.selectedImage = '';
+    this.saving = true;
+    this.db.collection('recipes').add(this.recipe)
+      .then(document => {
+        this.db.doc('recipes/' + document.id).collection('images').add({
+          path: this.selectedImagePath,
+          url: this.selectedImageUrl
+        }).then( result => {
+          this.onSaveSuccess();
+        }).catch(error => this.onSaveError(error));
+      }).catch(error => {
+        this.onSaveError(error);
+    });
+  }
 
+  uploadFile(files) {
+    const file = files.item(0);
+    if (file.type.match('image.*')) {
+      this.uploading = true;
       const imgPath = `test/${new Date().getTime()}_${file.name}`;
       const fileRef = this.storage.ref(imgPath);
       const task = this.storage.upload(imgPath, file);
@@ -44,33 +57,28 @@ export class AddRecipeComponent implements OnInit {
       task.snapshotChanges().pipe(
         finalize(() => {
           fileRef.getDownloadURL().subscribe(imageUrl => {
-            this.db.collection('recipes').add(this.recipe)
-              .then(document => {
-                this.db.doc('recipes/' + document.id).collection('images').add({
-                  path: imgPath,
-                  url: imageUrl
-                });
-                this.snackbar.open('Das Rezept wurde gespeichert.');
-                this.saving = false;
-                this.recipe = {} as Recipe;
-              }).catch(error => {
-                console.log(error);
-                this.snackbar.open('Das Rezept konnte nicht gespeichert werden.');
-                this.saving = false;
-                this.recipe = {} as Recipe;
-            });
+            this.selectedImageUrl = imageUrl;
+            this.selectedImagePath = imgPath;
+            this.uploading = false;
           });
         })).subscribe();
-    }
-  }
-
-  selectFile(files) {
-    const file = files.item(0);
-    if (file.type.match('image.*')) {
-      this.selectedFiles = files;
-      this.selectedImage = file.name;
     } else {
       alert('invalid format!');
     }
+  }
+
+  onSaveError(error) {
+    console.log(error);
+    this.snackbar.open('Das Rezept konnte nicht gespeichert werden.');
+    this.saving = false;
+    this.recipe = {} as Recipe;
+  }
+
+  onSaveSuccess() {
+    this.snackbar.open('Das Rezept wurde gespeichert.');
+    this.saving = false;
+    this.recipe = {} as Recipe;
+    this.selectedImageUrl = '';
+    this.selectedImagePath = '';
   }
 }
