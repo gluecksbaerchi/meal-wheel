@@ -2,7 +2,7 @@
   <mat-card class="recipe-card" align="center" *ngIf="saving">
     Dein Rezept wird gespeichert... <br/>
   </mat-card>
-  <mat-card class="recipe-card" align="center" *ngIf="!saving">
+  <mat-card class="recipe-card" *ngIf="!saving">
     <mat-card-title>
       Neues Rezept
     </mat-card-title>
@@ -20,8 +20,22 @@
           <input hidden type="file" #imgFileInput (change)="uploadFile($event.target.files)"/>
         </mat-grid-tile>
       </mat-grid-list>
-      <div *ngIf="uploading">Bildupload...  {{ uploadProgress | async }} %</div>
-      <img *ngIf="selectedImageUrl" class="recipe-image" mat-card-image [src]="selectedImageUrl">
+      <div *ngIf="uploadingError" style="color: red;">Der Bildupload ist leider fehlgeschlagen, bitte prüfe deine Netzwerkverbindung und versuche es später noch mal.</div>
+      <mat-card-content align="center">
+        <div *ngIf="uploading">Bildupload...  {{ uploadProgress | async }} %</div>
+        <img *ngIf="selectedImageUrl" class="recipe-image" mat-card-image [src]="selectedImageUrl">
+      </mat-card-content>
+      <app-ingredient-form-fields *ngFor="let ingredient of recipe.ingredients | keyvalue"
+                                  (removeIngredient)="removeIngredient($event)"
+                                  [ingredient]="ingredient.value"
+                                  [ingredientKey]="ingredient.key"
+      ></app-ingredient-form-fields>
+      <button style="width: 100%; margin-bottom: 20px;" type="button" mat-stroked-button title="weitere Zutat hinzufügen" (click)="addIngredient()">
+        Weitere Zutat hinzufügen
+      </button>
+      <mat-form-field>
+        <textarea placeholder="Beschreibung" [(ngModel)]="recipe.description" matInput rows="5" name="recipeDescription"></textarea>
+      </mat-form-field>
     </mat-card-content>
     <mat-card-actions>
       <button mat-button type="submit" [disabled]="uploading || saving" class="mat-primary">Speichern</button>

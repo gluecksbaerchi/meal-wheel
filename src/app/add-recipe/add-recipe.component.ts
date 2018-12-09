@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
-import {finalize} from 'rxjs/operators';
+import {catchError, finalize} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {Recipe} from '../models/recipe';
 import {MatSnackBar} from '@angular/material';
@@ -11,46 +11,53 @@ import {MatSnackBar} from '@angular/material';
   templateUrl: './add-recipe.component.html',
   styleUrls: ['./add-recipe.component.scss']
 })
-export class AddRecipeComponent implements OnInit {
+export class AddRecipeComponent {
 
-  recipe: Recipe = {} as Recipe;
+  recipe: Recipe = {
+    title: '',
+    id: null,
+    images: [],
+    description: '',
+    ingredients: [{
+      name: '',
+      amount: null,
+      unit: ''
+    }]
+  };
   selectedImagePath: string;
   selectedImageUrl: string;
 
   saving = false;
   uploading = false;
+  uploadingError = false;
   uploadProgress: Observable<number>;
 
   constructor(
     private db: AngularFirestore,
     private storage: AngularFireStorage,
     private snackbar: MatSnackBar
-  ) { }
-
-  ngOnInit() {
-
+  ) {
+    this.storage.storage.setMaxUploadRetryTime(2000);
   }
 
   onSubmit() {
     this.saving = true;
-    this.db.collection('recipes').add(this.recipe)
-      .then(document => {
-        this.db.doc('recipes/' + document.id).collection('images').add({
-          path: this.selectedImagePath,
-          url: this.selectedImageUrl
-        }).then( result => {
-          this.onSaveSuccess();
-        }).catch(error => this.onSaveError(error));
-      }).catch(error => {
-        this.onSaveError(error);
-    });
+    if (this.selectedImageUrl) {
+      this.recipe.images = [{
+        path: this.selectedImagePath,
+        url: this.selectedImageUrl
+      }];
+    }
+    this.recipe.id = this.db.createId();
+    this.db.collection('recipes').add(this.recipe);
+    this.onSaveSuccess();
   }
 
   uploadFile(files) {
     const file = files.item(0);
     if (file.type.match('image.*')) {
       this.uploading = true;
-      const imgPath = `test/${new Date().getTime()}_${file.name}`;
+      const imgPath = `recipe_images/${new Date().getTime()}_${file.name}`;
       const fileRef = this.storage.ref(imgPath);
       const task = this.storage.upload(imgPath, file);
       this.uploadProgress = task.percentageChanges();
@@ -61,24 +68,47 @@ export class AddRecipeComponent implements OnInit {
             this.selectedImagePath = imgPath;
             this.uploading = false;
           });
-        })).subscribe();
+        }),
+        catchError( (err) => {
+          this.uploading = false;
+          this.uploadingError = true;
+          return err;
+        })
+      ).subscribe();
     } else {
       alert('invalid format!');
     }
   }
 
-  onSaveError(error) {
-    console.log(error);
-    this.snackbar.open('Das Rezept konnte nicht gespeichert werden.');
-    this.saving = false;
-    this.recipe = {} as Recipe;
-  }
-
   onSaveSuccess() {
-    this.snackbar.open('Das Rezept wurde gespeichert.');
+    this.snackbar.open('Das Rezept wurde gespeichert.', '', {
+      duration: 3000
+    });
     this.saving = false;
-    this.recipe = {} as Recipe;
+    this.recipe = {
+      title: '',
+      id: null,
+      description: '',
+      images: [],
+      ingredients: [{
+        name: '',
+        amount: null,
+        unit: ''
+      }]
+    };
     this.selectedImageUrl = '';
     this.selectedImagePath = '';
+  }
+
+  addIngredient() {
+    this.recipe.ingredients.push({
+      name: '',
+      unit: '',
+      amount: null
+    });
+  }
+
+  removeIngredient(ingredientKey) {
+    delete this.recipe.ingredients[ingredientKey];
   }
 }

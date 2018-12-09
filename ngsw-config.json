@@ -12,13 +12,32 @@
           "/*.js"
         ]
       }
-    }, {
+    },
+    {
       "name": "assets",
       "installMode": "lazy",
       "updateMode": "prefetch",
       "resources": {
         "files": [
           "/assets/**"
+        ]
+      }
+    },
+    {
+      "name": "storage_images",
+      "installMode": "prefetch",
+      "resources": {
+        "urls": [
+          "https://firebasestorage.googleapis.com/v0/b/meal-wheel-b6b23.appspot.com/o/**"
+        ]
+      }
+    },
+    {
+      "name": "fonts",
+      "resources": {
+        "urls": [
+          "https://fonts.googleapis.com/**",
+          "https://fonts.gstatic.com/**"
         ]
       }
     }

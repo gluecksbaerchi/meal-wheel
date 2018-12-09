@@ -12,15 +12,11 @@ import {Recipe} from '../models/recipe';
 export class RecipeDetailComponent implements OnInit {
 
   recipe: Recipe;
-  images: Image[];
 
   constructor(private route: ActivatedRoute, private db: AngularFirestore) {
     const recipeId = this.route.snapshot.paramMap.get('id');
     db.doc<Recipe>('recipes/' + recipeId).valueChanges().subscribe(recipe => {
       this.recipe = recipe;
-    });
-    db.collection<Image>('recipes/' + recipeId + '/images').valueChanges().subscribe(images => {
-      this.images = images;
     });
   }
 

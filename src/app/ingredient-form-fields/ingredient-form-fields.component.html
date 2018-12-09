@@ -1,0 +1,19 @@
+<div fxLayout="row" fxLayoutGap="10px">
+  <mat-form-field fxFlex="15%">
+    <input matInput type="number" placeholder="Anzahl" [(ngModel)]="ingredient.amount" [ngModelOptions]="{standalone: true}"/>
+  </mat-form-field>
+
+  <mat-form-field fxFlex="15%">
+    <input matInput type="text" placeholder="Einheit" maxlength="265" [(ngModel)]="ingredient.unit" [ngModelOptions]="{standalone: true}"/>
+  </mat-form-field>
+
+  <mat-form-field fxFlex="45%">
+    <input matInput type="text" placeholder="Zutat" maxlength="265" [(ngModel)]="ingredient.name" [ngModelOptions]="{standalone: true}"/>
+  </mat-form-field>
+
+  <mat-card-content fxFlex="25%" align="center">
+    <button type="button" mat-button matSuffix mat-icon-button title="Zutat entfernen" (click)="removeIngredient.emit(ingredientKey)">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-card-content>
+</div>

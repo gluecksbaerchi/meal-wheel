@@ -27,6 +27,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
+import { IngredientFormFieldsComponent } from './ingredient-form-fields/ingredient-form-fields.component';
+import {FlexModule} from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,8 @@ import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
     NavComponent,
     AddRecipeComponent,
     ViewRecipesComponent,
-    RecipeDetailComponent
+    RecipeDetailComponent,
+    IngredientFormFieldsComponent
   ],
   imports: [
     BrowserModule,
@@ -55,6 +58,7 @@ import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
     MatFormFieldModule,
     MatInputModule,
     MatSnackBarModule,
+    FlexModule,
     FormsModule,
     RouterModule.forRoot([
         {
