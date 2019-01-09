@@ -29,6 +29,7 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
 import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
 import { IngredientFormFieldsComponent } from './ingredient-form-fields/ingredient-form-fields.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import { MealPlannerComponent } from './meal-planner/meal-planner.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     AddRecipeComponent,
     ViewRecipesComponent,
     RecipeDetailComponent,
-    IngredientFormFieldsComponent
+    IngredientFormFieldsComponent,
+    MealPlannerComponent
   ],
   imports: [
     BrowserModule,
@@ -66,6 +68,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
                 { path: 'add-recipe', component: AddRecipeComponent },
                 { path: 'view-recipes', component: ViewRecipesComponent },
                 { path: 'recipe/:id', component: RecipeDetailComponent },
+                { path: 'meal-planner', component: MealPlannerComponent },
             ]
         },
     ]),

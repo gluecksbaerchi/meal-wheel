@@ -1,0 +1,17 @@
+<mat-card>
+  <mat-card-title>Essensplaner</mat-card-title>
+  <mat-card-content>
+    <form>
+      <mat-form-field>
+        <input type="number" matInput placeholder="Anzahl Tage" name="numberOfDays" [(ngModel)]="numberOfDays">
+      </mat-form-field>
+      <button type="button" (click)="generateMealPlan()" mat-button color="primary">Plan erstellen</button>
+    </form>
+    <h3 *ngIf="showPlan">Dein Plan für {{numberOfDays}} Tage</h3>
+    <mat-list>
+      <mat-list-item *ngFor="let recipe of (recipes | async)">
+        {{recipe.title}}
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>
