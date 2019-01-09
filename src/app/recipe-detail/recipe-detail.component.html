@@ -1,9 +1,21 @@
-<mat-card class="recipe-card" align="center" *ngIf="recipe">
-  <mat-card-title>
+<mat-card class="recipe-card" *ngIf="recipe">
+  <mat-card-title align="center">
     {{recipe.title}}
   </mat-card-title>
   <mat-card-content>
     <mat-divider></mat-divider>
-    <img *ngFor="let image of recipe.images" class="recipe-image" mat-card-image [src]="image.url">
+    <div align="center">
+      <img *ngIf="recipe.images.length <= 0" class="recipe-image"  mat-card-image src="assets/default-meal.jpg">
+      <img *ngFor="let image of recipe.images" class="recipe-image" mat-card-image [src]="image.url">
+    </div>
+    <h3>Zutaten</h3>
+    <mat-list>
+      <mat-list-item *ngFor="let ingredient of recipe.ingredients">
+        <mat-icon matListIcon>label</mat-icon>
+        <h4 matLine>{{ingredient.amount}} {{ingredient.unit}} {{ingredient.name}}</h4>
+      </mat-list-item>
+    </mat-list>
+    <h3>Beschreibung</h3>
+    <p>{{recipe.description}}</p>
   </mat-card-content>
 </mat-card>

@@ -45,3 +45,4 @@ Thumbs.db
 #Firebase
 .firebaserc
 cors.json
+.firebase
