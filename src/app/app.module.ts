@@ -67,6 +67,7 @@ import { MealPlannerComponent } from './meal-planner/meal-planner.component';
             path: '', component: NavComponent, children: [
                 { path: 'add-recipe', component: AddRecipeComponent },
                 { path: 'view-recipes', component: ViewRecipesComponent },
+                { path: '', redirectTo: '/view-recipes', pathMatch: 'full' },
                 { path: 'recipe/:id', component: RecipeDetailComponent },
                 { path: 'meal-planner', component: MealPlannerComponent },
             ]
